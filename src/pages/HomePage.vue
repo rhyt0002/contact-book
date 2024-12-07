@@ -13,7 +13,7 @@
       <div v-for="contact in filteredContacts" :key="contact.id" class="contact-card">
         <h3>{{ contact.firstName }} {{ contact.lastName }}</h3>
         <p>Email: {{ contact.email }}</p>
-        <p>Phone: {{ contact.phoneNumber }}</p>  <!-- Displaying Phone Number -->
+        <p>Phone: {{ contact.phoneNumber }}</p>  
         <div class="actions">
           <button class="edit-btn" @click="editContact(contact.id)">Edit</button>  <!-- Edit Button -->
           <button class="delete-btn" @click="deleteContact(contact.id)">Delete</button>  <!-- Delete Button -->
@@ -60,9 +60,19 @@ export default {
   },
   computed: {
     filteredContacts() {
-      return this.contacts.filter(contact => {
+      // Filter contacts based on the search term
+      const filtered = this.contacts.filter(contact => {
         const fullName = `${contact.firstName} ${contact.lastName}`.toLowerCase();
         return fullName.includes(this.searchTerm.toLowerCase());
+      });
+
+      // Sort the filtered contacts by last name
+      return filtered.sort((a, b) => {
+        const lastNameA = a.lastName.toLowerCase();
+        const lastNameB = b.lastName.toLowerCase();
+        if (lastNameA < lastNameB) return -1;
+        if (lastNameA > lastNameB) return 1;
+        return 0;
       });
     },
   },
