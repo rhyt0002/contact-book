@@ -1,8 +1,16 @@
 <template>
   <div class="home-page">
     <h1>Contacts</h1>
+        <!-- Search Bar -->
+    <div class="search-bar">
+      <input
+        type="text"
+        v-model="searchTerm"
+        placeholder="Search contacts..."
+      />
+    </div>
     <div class="contacts-list">
-      <div v-for="contact in contacts" :key="contact.id" class="contact-card">
+      <div v-for="contact in filteredContacts" :key="contact.id" class="contact-card">
         <h3>{{ contact.firstName }} {{ contact.lastName }}</h3>
         <p>Email: {{ contact.email }}</p>
         <p>Phone: {{ contact.phoneNumber }}</p>  <!-- Displaying Phone Number -->
@@ -47,7 +55,16 @@ export default {
         phoneNumber: '',
         email: '',
       },
+      searchTerm: '',
     };
+  },
+  computed: {
+    filteredContacts() {
+      return this.contacts.filter(contact => {
+        const fullName = `${contact.firstName} ${contact.lastName}`.toLowerCase();
+        return fullName.includes(this.searchTerm.toLowerCase());
+      });
+    },
   },
   
   methods: {
@@ -82,6 +99,25 @@ body {
   padding: 0;
   color: #333; /* Neutral text color */
   line-height: 1.6;
+}
+.search-bar {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 80%;
+  max-width: 400px;
+  border: 1px solid #ccd1d9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+  border-color: #0078d7;
+  outline: none;
 }
 
 .home-page {
